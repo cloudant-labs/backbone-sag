@@ -1,0 +1,93 @@
+<html>
+<script type="text/javascript" src="jquery-min.js"></script>
+<script type="text/javascript" src="underscore-min.js"></script>
+<script type="text/javascript" src="backbone-min.js"></script>
+<script type="text/javascript" src="json2.js"></script>
+<script type="text/javascript" src="sag.js"></script>
+<script type="text/javascript" src="backbone.sag.js"></script>
+<script type="text/javascript">
+$(function() {
+/*
+ * Connect to a database, retrieve a view into a collection
+ */
+var pieces = window.location.pathname.split('/_design/');
+Backbone.sag.database.name = pieces[0].replace('/', '');
+console.log(Backbone.sag.database.name);
+Backbone.sag.enableChangesFeed = false;
+Backbone.sag.debug = true;
+
+
+var Doc = Backbone.Model.extend({
+  initialize: function(doc) {  }
+});
+
+var collection1 = Backbone.Collection.extend({
+  model: Doc,
+  url: '/_design/app/_view/count'
+});
+
+var collection2 = Backbone.Collection.extend({
+  model: Doc,
+  url: 'count',
+  design: 'app',
+  view_params: {
+    reduce: false,
+    startkey: '"foo"',
+    endkey: '"foobar"'
+  }
+});
+
+var collection3 = Backbone.Collection.extend({
+  model: Doc,
+  url: 'count',
+  design: 'app',
+  view_params: {
+    reduce: true,
+    group: true,
+    keys: ["foo"]
+  }
+});
+
+var TestView = Backbone.View.extend({
+  initialize: function(settings) {
+    // Bind functions to actions
+    _.bindAll(this);
+
+    this.c1 = settings.c1;
+    this.c1.bind('change', this.render);
+    this.c1.bind('add', this.render);
+    this.c1.bind('remove', this.render);
+    this.c1.bind('reset', this.render);
+    this.c1.fetch();
+
+    this.c2 = settings.c2;
+    this.c2.bind('change', this.render);
+    this.c2.bind('add', this.render);
+    this.c2.bind('remove', this.render);
+    this.c2.bind('reset', this.render);
+    this.c2.fetch();
+
+    this.c3 = settings.c3;
+    this.c3.bind('change', this.render);
+    this.c3.bind('add', this.render);
+    this.c3.bind('remove', this.render);
+    this.c3.bind('reset', this.render);
+    this.c3.fetch();
+  },
+  render: function() {
+    console.log(this.c1);
+    console.log(this.c2);
+    console.log(this.c3);
+  }
+})
+
+var view = new TestView({'c1': new collection1(),
+                         'c2': new collection2(),
+                         'c3': new collection3()});
+
+});
+
+</script>
+
+
+</html>

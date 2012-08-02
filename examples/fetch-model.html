@@ -1,0 +1,33 @@
+<html>
+<script type="text/javascript" src="jquery-min.js"></script>
+<script type="text/javascript" src="underscore-min.js"></script>
+<script type="text/javascript" src="backbone-min.js"></script>
+<script type="text/javascript" src="json2.js"></script>
+<script type="text/javascript" src="sag.js"></script>
+<script type="text/javascript" src="backbone.sag.js"></script>
+
+<script type="text/javascript">
+$(function() {
+/*
+ * Connect to a database, retrieve a view into a collection
+ */
+var pieces = window.location.pathname.split('/_design/');
+Backbone.sag.database.name = pieces[0].replace('/', '');
+console.log(Backbone.sag.database.name);
+Backbone.sag.enableChangesFeed = false;
+Backbone.sag.debug = true;
+
+
+var Doc = Backbone.Model.extend({
+  initialize: function(doc) {  }
+});
+
+var model = new Doc({id:'eaa7009446c761e7dc8ff1f4dd001c49'});
+model.on('change', function(){console.log(this)});
+model.fetch();
+
+});
+</script>
+
+
+</html>

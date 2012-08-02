@@ -1,0 +1,3 @@
+[submodule "vendor/sag-js"]
+	path = vendor/sag-js
+	url = git://github.com/cloudant-labs/sag-js.git
