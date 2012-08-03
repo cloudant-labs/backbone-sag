@@ -116,12 +116,13 @@
           return (collection.error || options.error)();
         }
       };
-      request(query);
+      return request(query);
     }
   };
 
   // Modelled after Andrzej Sliwa's sync, but updated
   Backbone.sync = function( method, obj, options ) {
+    var deferred;
     if ( method === "create" || method === "update" ) {
       // triggered on "model.save(...)"
       console.log('create/update');
@@ -134,7 +135,7 @@
       // depends from where sync is called
       if ( obj.model ) {
         // triggered on "collection.fetch(...)"
-        Backbone.sag.fetchCollection( obj, options );
+        deferred = Backbone.sag.fetchCollection( obj, options );
       } else {
         // triggered on "model.fetch(...)"
         var db = Backbone.sag.db();
@@ -147,6 +148,7 @@
         }});
       }
     }
+    return deferred;
     // TODO: changes feed handler
   };
 })();

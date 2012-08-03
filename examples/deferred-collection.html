@@ -1,0 +1,50 @@
+<html>
+<script type="text/javascript" src="jquery-min.js"></script>
+<script type="text/javascript" src="underscore-min.js"></script>
+<script type="text/javascript" src="backbone-min.js"></script>
+<script type="text/javascript" src="json2.js"></script>
+<script type="text/javascript" src="sag.js"></script>
+<script type="text/javascript" src="backbone.sag.js"></script>
+<script type="text/javascript">
+$(function() {
+/*
+ * Connect to a database, retrieve a view into a collection
+ */
+  var pieces = window.location.pathname.split('/_design/');
+  Backbone.sag.database.name = pieces[0].replace('/', '');
+  Backbone.sag.enableChangesFeed = false;
+  Backbone.sag.debug = true;
+
+  var Doc = Backbone.Model.extend({
+    initialize: function(doc) {  }
+  });
+
+  var collection1 = Backbone.Collection.extend({
+    model: Doc,
+    url: '/_design/app/_view/count'
+  });
+
+  var collection2 = Backbone.Collection.extend({
+    model: Doc,
+    url: 'count',
+    design: 'app',
+    couch: {
+      reduce: true,
+      group: true,
+      keys: ["foo"]
+    }
+  });
+
+  var c1 = new collection1();
+  var c2 = new collection2();
+
+  $.when(c1.fetch(), c2.fetch()).then(function(){
+    console.log([c1,c2]);
+  });
+
+});
+
+</script>
+
+
+</html>
