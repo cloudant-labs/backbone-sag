@@ -15,5 +15,10 @@ Run make
 Some generated docs
 
 ### Examples
-Some gists
+Live examples (currently just logging to console):
+ * http://drsm79.cloudant.com/sag-bb/_design/app/fetch-model.html
+ * http://drsm79.cloudant.com/sag-bb/_design/app/crud-model.html
+ * http://drsm79.cloudant.com/sag-bb/_design/app/collection-from-view.html
+ * http://drsm79.cloudant.com/sag-bb/_design/app/collection-from-all_docs.html
+ * http://drsm79.cloudant.com/sag-bb/_design/app/deferred-collection.html
 
