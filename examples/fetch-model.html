@@ -13,10 +13,8 @@ $(function() {
  */
 var pieces = window.location.pathname.split('/_design/');
 Backbone.sag.database.name = pieces[0].replace('/', '');
-console.log(Backbone.sag.database.name);
 Backbone.sag.enableChangesFeed = false;
 Backbone.sag.debug = true;
-
 
 var Doc = Backbone.Model.extend({
   initialize: function(doc) {  }
