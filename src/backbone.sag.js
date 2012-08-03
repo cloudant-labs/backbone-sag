@@ -90,15 +90,18 @@
         // If there's a design the _url will just be the view name, so build a full url
         url = '/_design/' + collection.design + '/_view/' + url;
       }
-      if (collection.view_params){
+      if (collection.couchdb){
+        _.each(collection.couchdb, function(value, key){
+          if (_.isFunction(value)) collection.couchdb[key] = value();
+        });
         // The collection has parameters to pass into the view
-        if (collection.view_params.keys) {
+        if (collection.couchdb.keys) {
           // Needs to POST
           request = db.post;
-          query.data = {keys: collection.view_params.keys};
-          delete collection.view_params.keys;
+          query.data = {keys: collection.couchdb.keys};
+          delete collection.couchdb.keys;
         }
-        url += '?' + $.param(collection.view_params);
+        url += '?' + $.param(collection.couchdb);
       }
       //
       query.url = url;

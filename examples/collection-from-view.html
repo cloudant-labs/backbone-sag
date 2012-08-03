@@ -12,7 +12,6 @@ $(function() {
  */
 var pieces = window.location.pathname.split('/_design/');
 Backbone.sag.database.name = pieces[0].replace('/', '');
-console.log(Backbone.sag.database.name);
 Backbone.sag.enableChangesFeed = false;
 Backbone.sag.debug = true;
 
@@ -30,7 +29,7 @@ var collection2 = Backbone.Collection.extend({
   model: Doc,
   url: 'count',
   design: 'app',
-  view_params: {
+  couch: {
     reduce: false,
     startkey: '"foo"',
     endkey: '"foobar"'
@@ -41,7 +40,7 @@ var collection3 = Backbone.Collection.extend({
   model: Doc,
   url: 'count',
   design: 'app',
-  view_params: {
+  couch: {
     reduce: true,
     group: true,
     keys: ["foo"]
