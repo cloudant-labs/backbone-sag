@@ -123,13 +123,35 @@
   // Modelled after Andrzej Sliwa's sync, but updated
   Backbone.sync = function( method, obj, options ) {
     var deferred;
+    var db = Backbone.sag.db();
     if ( method === "create" || method === "update" ) {
       // triggered on "model.save(...)"
       console.log('create/update');
+      console.log(obj);
+      deferred = db.put({id: obj.id,
+        data: obj.toJSON(),
+        callback: function(resp, success){
+          if (success){
+            options.success(resp.body);
+          } else {
+            options.error(resp.body);
+          }
+        }
+      });
       //Backbone.sag.create( obj, success, error );
     } else if ( method === "delete" ) {
       // triggered on "model.destroy(...)"
       console.log('delete');
+      deferred = db.delete(obj.id,
+        obj.get('_rev'),
+        function(resp, success){
+          if (success){
+            options.success(resp.body);
+          } else {
+            options.error(resp.body);
+          }
+        });
+
       //Backbone.couch.remove( obj, success, error );
     } else if ( method === "read" ) {
       // depends from where sync is called
@@ -138,8 +160,8 @@
         deferred = Backbone.sag.fetchCollection( obj, options );
       } else {
         // triggered on "model.fetch(...)"
-        var db = Backbone.sag.db();
-        db.get({url: obj.id, callback: function(resp, success){
+        deferred = db.get({url: obj.id,
+          callback: function(resp, success){
           if (success){
             options.success(resp.body);
           } else {
